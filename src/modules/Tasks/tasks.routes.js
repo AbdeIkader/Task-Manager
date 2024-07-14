@@ -4,9 +4,9 @@ import { verifyAndAuthorize } from "../../middlewares/authToken.js";
 
 const taskRouter = Router();
 
-taskRouter.post("/", verifyAndAuthorize, task.createTask);
+taskRouter.post("/create", verifyAndAuthorize, task.createTask);
 taskRouter.get("/user-tasks", verifyAndAuthorize, task.getUserTasks);
-taskRouter.get("/", verifyAndAuthorize, task.getAllTasks);
+taskRouter.get("/get-all-tasks", verifyAndAuthorize, task.getAllTasks);
 taskRouter.get("/shared-tasks", verifyAndAuthorize, task.getSharedTasks);
 taskRouter.get("/private-tasks", verifyAndAuthorize, task.getPrivateTasks);
 taskRouter.get("/:id", verifyAndAuthorize, task.getSpecificTask);

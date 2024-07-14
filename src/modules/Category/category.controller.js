@@ -1,6 +1,7 @@
 import { catchAsyncError } from "./../../utils/catchAsyncError.js";
 import { categoryModel } from "./../../../DB/models/category.model.js";
 import { AppError } from "../../utils/AppError.js";
+import { ApiFeatures } from "../../utils/ApiFeatures.js";
 
 const createCategory = catchAsyncError(async (req, res, next) => {
   const { name } = req.body;
@@ -22,8 +23,13 @@ const createCategory = catchAsyncError(async (req, res, next) => {
 });
 
 const getCategories = catchAsyncError(async (req, res, next) => {
-  const categories = await categoryModel
-    .find({ user: req.user._id })
+  const features = new ApiFeatures(categoryModel.find(), req.query)
+    .filteration()
+    .sort()
+    .pagination()
+    .fields();
+
+  const categories = await features.mongooseQuery
     .populate({
       path: 'tasks',
       populate: {
@@ -33,7 +39,7 @@ const getCategories = catchAsyncError(async (req, res, next) => {
     })
     .populate({
       path: 'user',
-      select: 'name -_id' 
+      select: 'name -_id'
     });
 
   const transformedCategories = categories.map(category => {
