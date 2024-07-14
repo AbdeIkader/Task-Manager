@@ -1,6 +1,8 @@
 import { Router } from "express";
 import * as task from "./tasks.controller.js";
 import { verifyAndAuthorize } from "../../middlewares/authToken.js";
+import { validate } from "../../middlewares/validate.js";
+import { createTaskSchema, updateTaskSchema } from "./tasks.validation.js";
 
 const taskRouter = Router();
 

@@ -6,11 +6,10 @@ export class ApiFeatures {
 
   //1-Pagination
   pagination() {
-    const PAGE_LIMIT = this.queryString.limit * 1 || 3; // Use limit from query or default to 3
+    const PAGE_LIMIT = this.queryString.limit * 1 || 3; 
     let PAGE_NUMBER = this.queryString.page * 1 || 1;
     if (this.queryString.page <= 0) PAGE_NUMBER = 1;
-    const PAGE_SKIP = (PAGE_NUMBER - 1) * PAGE_LIMIT; // Skip documents
-
+    const PAGE_SKIP = (PAGE_NUMBER - 1) * PAGE_LIMIT; 
     this.mongooseQuery.skip(PAGE_SKIP).limit(PAGE_LIMIT);
     return this;
   }
@@ -25,10 +24,10 @@ export class ApiFeatures {
     filterObj = JSON.parse(filterObj);
 
     if (filterObj.name) {
-      filterObj.name = { $regex: filterObj.name, $options: "i" }; // Filter by category name
+      filterObj.name = { $regex: filterObj.name, $options: "i" }; 
     }
     if (filterObj.isShared) {
-      filterObj.isShared = filterObj.isShared === "true"; // Convert to boolean
+      filterObj.isShared = filterObj.isShared === "true";
     }
 
     this.mongooseQuery.find(filterObj);

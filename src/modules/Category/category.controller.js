@@ -31,25 +31,25 @@ const getCategories = catchAsyncError(async (req, res, next) => {
 
   const categories = await features.mongooseQuery
     .populate({
-      path: 'tasks',
+      path: "tasks",
       populate: {
-        path: 'user',
-        select: 'name -_id' 
-      }
+        path: "user",
+        select: "name -_id",
+      },
     })
     .populate({
-      path: 'user',
-      select: 'name -_id'
+      path: "user",
+      select: "name -_id",
     });
 
-  const transformedCategories = categories.map(category => {
+  const transformedCategories = categories.map((category) => {
     return {
       ...category.toObject(),
       user: category.user.name,
-      tasks: category.tasks.map(task => ({
+      tasks: category.tasks.map((task) => ({
         ...task.toObject(),
-        user: task.user.name
-      }))
+        user: task.user.name,
+      })),
     };
   });
 
@@ -63,15 +63,15 @@ const getCategory = catchAsyncError(async (req, res, next) => {
   const category = await categoryModel
     .findById(req.params.id)
     .populate({
-      path: 'tasks',
+      path: "tasks",
       populate: {
-        path: 'user',
-        select: 'name -_id'
-      }
+        path: "user",
+        select: "name -_id",
+      },
     })
     .populate({
-      path: 'user',
-      select: 'name -_id'  
+      path: "user",
+      select: "name -_id",
     });
 
   if (!category) {
@@ -84,10 +84,10 @@ const getCategory = catchAsyncError(async (req, res, next) => {
   const transformedCategory = {
     ...category.toObject(),
     user: category.user.name,
-    tasks: category.tasks.map(task => ({
+    tasks: category.tasks.map((task) => ({
       ...task.toObject(),
-      user: task.user.name
-    }))
+      user: task.user.name,
+    })),
   };
 
   res.status(200).json({
@@ -100,8 +100,7 @@ const updateCategory = catchAsyncError(async (req, res, next) => {
   const { name } = req.body;
 
   const category = await categoryModel.findById(req.params.id);
-
-  if (!category || category.user.toString() !== req.user._id.toString()) {
+  if (!category) {
     return next(new AppError("Category not found", 404));
   }
 
@@ -119,17 +118,18 @@ const updateCategory = catchAsyncError(async (req, res, next) => {
 const deleteCategory = catchAsyncError(async (req, res, next) => {
   const category = await categoryModel.findById(req.params.id);
 
-  if (!category || category.user.toString() !== req.user._id.toString()) {
+  if (!category) {
     return next(new AppError("Category not found", 404));
   }
 
-  await category.remove();
+  await category.deleteOne();
 
   res.status(204).json({
     success: true,
     message: "Category deleted successfully",
   });
 });
+
 export {
   createCategory,
   getCategories,

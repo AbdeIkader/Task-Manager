@@ -166,9 +166,6 @@ const getSpecificTask = catchAsyncError(async (req, res, next) => {
     return next(new AppError("Task not found", 404));
   }
 
-  if (task.user.toString() !== req.user._id.toString()) {
-    return next(new AppError("You're not allowed to view this task", 403));
-  }
 
   const transformedTask = {
     ...task.toObject(),
@@ -186,14 +183,14 @@ const updateTask = catchAsyncError(async (req, res, next) => {
 
   const task = await taskModel.findById(req.params.id);
 
-  if (!task || task.user.toString() !== req.user._id.toString()) {
-    return next(
-      new AppError(
-        "Task not found or you're not allowed to update this task",
-        403
-      )
-    );
-  }
+  // if (!task || task.user.toString() !== req.user._id.toString()) {
+  //   return next(
+  //     new AppError(
+  //       "Task not found or you're not allowed to update this task",
+  //       403
+  //     )
+  //   );
+  // }
 
   task.title = title !== undefined ? title : task.title;
   task.type = type !== undefined ? type : task.type;
