@@ -38,12 +38,12 @@ const signUp = catchAsyncError(async (req, res, next) => {
 
 const signIn = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
-console.log({email,password});
+  console.log({ email, password });
   const user = await userModel.findOne({ email });
   if (!user) {
     return next(new AppError("Invalid email or password", 401));
   }
-  
+
   const isMatch = await bcrypt.compare(password, user.password);
   console.log(password);
   console.log(user.password);
@@ -67,4 +67,5 @@ console.log({email,password});
     token,
   });
 });
+
 export { signUp, signIn };

@@ -1,0 +1,1 @@
+//If you want to test with dummy data use node seed.js it will create 50 users, categories, and tasks,

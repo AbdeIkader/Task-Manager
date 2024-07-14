@@ -1,20 +1,29 @@
 import mongoose, { model, Schema } from "mongoose";
 
-
-
-const categorySchema = new Schema({
-    name:{
-        type:String,
-        required:true,
-        trim:true,
-        unique:true
+const categorySchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    userId:{
-        type:Schema.ObjectId,
-        ref:'User'
-    }
-},{
-    timestamps:true
-})
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    tasks: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Task",
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
-export const categoryModel = new model('Category',categorySchema)
+categorySchema.index({ name: 1, user: 1 }, { unique: true });
+
+export const categoryModel = model("Category", categorySchema);
